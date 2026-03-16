@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
-import { Startup, StartupFrontmatter } from "./types";
+import { Startup, StartupFrontmatter, validateFrontmatter } from "./types";
 
 const CONTENT_DIR = path.join(process.cwd(), "content/startups");
 
@@ -13,6 +13,7 @@ export function getAllStartups(): Startup[] {
       const filePath = path.join(CONTENT_DIR, filename);
       const raw = fs.readFileSync(filePath, "utf-8");
       const { data, content } = matter(raw);
+      validateFrontmatter(data, filename);
       return {
         ...(data as StartupFrontmatter),
         content,
@@ -26,10 +27,12 @@ export function getAllStartups(): Startup[] {
 }
 
 export function getStartupBySlug(slug: string): Startup | undefined {
-  const filePath = path.join(CONTENT_DIR, `${slug}.mdx`);
+  const safe = slug.replace(/[^a-z0-9-]/g, "");
+  const filePath = path.join(CONTENT_DIR, `${safe}.mdx`);
   if (!fs.existsSync(filePath)) return undefined;
   const raw = fs.readFileSync(filePath, "utf-8");
   const { data, content } = matter(raw);
+  validateFrontmatter(data, `${safe}.mdx`);
   return { ...(data as StartupFrontmatter), content };
 }
 

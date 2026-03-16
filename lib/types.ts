@@ -53,6 +53,26 @@ export const CAUSE_LABELS: Record<CauseOfDeath, string> = {
   "founder-issues": "Founder Issues",
 };
 
+export const REQUIRED_FRONTMATTER_FIELDS: (keyof StartupFrontmatter)[] = [
+  "name",
+  "slug",
+  "tagline",
+  "founded",
+  "died",
+  "status",
+  "causeOfDeath",
+  "aiSubcategory",
+  "sources",
+];
+
+export function validateFrontmatter(data: Record<string, unknown>, filename: string): void {
+  for (const field of REQUIRED_FRONTMATTER_FIELDS) {
+    if (data[field] === undefined || data[field] === null) {
+      throw new Error(`Missing required field "${field}" in ${filename}`);
+    }
+  }
+}
+
 export const SUBCATEGORY_LABELS: Record<AISubcategory, string> = {
   "content-generation": "Content Gen",
   "image-generation": "Image Gen",

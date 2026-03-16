@@ -75,7 +75,7 @@ export default async function StartupPage({
         <span>
           <strong className="text-ink-muted">Sources:</strong>{" "}
           {startup.sources.map((s, i) => (
-            <span key={i}>
+            <span key={s.url}>
               {i > 0 && ", "}
               <a
                 href={s.url}
