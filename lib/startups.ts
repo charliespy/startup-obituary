@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
+import { cache } from "react";
 import { Startup, StartupFrontmatter, validateFrontmatter } from "./types";
 
 const CONTENT_DIR = path.join(process.cwd(), "content/startups");
@@ -19,14 +20,12 @@ export function getAllStartups(): Startup[] {
         content,
       };
     })
-    .sort((a, b) => {
-      const aYear = typeof a.died === "number" ? a.died : 9999;
-      const bYear = typeof b.died === "number" ? b.died : 9999;
-      return bYear - aYear;
-    });
+    .sort((a, b) => b.died - a.died);
 }
 
-export function getStartupBySlug(slug: string): Startup | undefined {
+export const getStartupBySlug = cache(function getStartupBySlug(
+  slug: string
+): Startup | undefined {
   const safe = slug.replace(/[^a-z0-9-]/g, "");
   const filePath = path.join(CONTENT_DIR, `${safe}.mdx`);
   if (!fs.existsSync(filePath)) return undefined;
@@ -34,7 +33,7 @@ export function getStartupBySlug(slug: string): Startup | undefined {
   const { data, content } = matter(raw);
   validateFrontmatter(data, `${safe}.mdx`);
   return { ...(data as StartupFrontmatter), content };
-}
+});
 
 export function getAllSlugs(): string[] {
   return fs

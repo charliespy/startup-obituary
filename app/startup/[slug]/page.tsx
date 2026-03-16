@@ -21,7 +21,9 @@ export async function generateMetadata({
     description: startup.tagline,
     openGraph: {
       title: `${startup.name}: ${startup.tagline}`,
-      description: startup.content.split("\n\n")[0],
+      description: startup.content
+        .split("\n\n")[0]
+        .replace(/[*_~`#\[\]]/g, ""),
       siteName: "The Startup Obituary",
     },
   };
@@ -62,7 +64,7 @@ export default async function StartupPage({
         <div className="mt-6 border-t border-rule pt-6">
           <div className="text-base md:text-lg leading-[2]">
             {paragraphs.map((p, i) => (
-              <p key={i} className={`mb-4 ${i === 0 ? "first-letter:text-3xl first-letter:font-bold first-letter:float-left first-letter:mr-1 first-letter:leading-none" : ""}`}>
+              <p key={p.slice(0, 40)} className={`mb-4 ${i === 0 ? "first-letter:text-3xl first-letter:font-bold first-letter:float-left first-letter:mr-1 first-letter:leading-none" : ""}`}>
                 {p}
               </p>
             ))}

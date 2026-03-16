@@ -1,32 +1,26 @@
 export type CauseOfDeath =
   | "no-pmf"
   | "burned-cash"
-  | "commoditized-by-platform"
-  | "competition"
-  | "acqui-hired"
-  | "regulation"
-  | "ethics-scandal"
-  | "founder-issues";
+  | "commoditized"
+  | "founder-issues"
+  | "platform-risk";
 
 export type AISubcategory =
-  | "content-generation"
-  | "image-generation"
-  | "coding-tools"
-  | "ai-agents"
-  | "ai-companions"
-  | "healthcare-ai"
-  | "autonomous-vehicles"
+  | "ai-wrappers"
+  | "dev-tools"
   | "enterprise-ai"
-  | "search";
+  | "content-generation"
+  | "ai-companions"
+  | "ai-agents";
 
-export type StartupStatus = "dead" | "declining" | "pivoted" | "acqui-hired";
+export type StartupStatus = "dead";
 
 export interface StartupFrontmatter {
   name: string;
   slug: string;
   tagline: string;
   founded: number;
-  died: number | string;
+  died: number;
   status: StartupStatus;
   location: string;
   totalFunding: string;
@@ -45,12 +39,9 @@ export interface Startup extends StartupFrontmatter {
 export const CAUSE_LABELS: Record<CauseOfDeath, string> = {
   "no-pmf": "No PMF",
   "burned-cash": "Burned Cash",
-  "commoditized-by-platform": "Commoditized",
-  competition: "Competition",
-  "acqui-hired": "Acqui-hired",
-  regulation: "Regulation",
-  "ethics-scandal": "Ethics Scandal",
+  commoditized: "Commoditized",
   "founder-issues": "Founder Issues",
+  "platform-risk": "Platform Risk",
 };
 
 export const REQUIRED_FRONTMATTER_FIELDS: (keyof StartupFrontmatter)[] = [
@@ -74,13 +65,10 @@ export function validateFrontmatter(data: Record<string, unknown>, filename: str
 }
 
 export const SUBCATEGORY_LABELS: Record<AISubcategory, string> = {
-  "content-generation": "Content Gen",
-  "image-generation": "Image Gen",
-  "coding-tools": "Coding Tools",
-  "ai-agents": "AI Agents",
-  "ai-companions": "AI Companions",
-  "healthcare-ai": "Healthcare AI",
-  "autonomous-vehicles": "Self-Driving",
+  "ai-wrappers": "AI Wrappers",
+  "dev-tools": "Dev Tools",
   "enterprise-ai": "Enterprise AI",
-  search: "Search",
+  "content-generation": "Content Gen",
+  "ai-companions": "AI Companions",
+  "ai-agents": "AI Agents",
 };

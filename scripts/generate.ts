@@ -1,6 +1,8 @@
 import OpenAI from "openai";
 import fs from "fs";
 import path from "path";
+import matter from "gray-matter";
+import { validateFrontmatter } from "../lib/types";
 
 const SYSTEM_PROMPT = `You are a brilliant narrative journalist writing obituaries for failed AI startups. Your style is novelistic and cinematic:
 
@@ -27,14 +29,14 @@ name: "Company Name"
 slug: "company-name"
 tagline: "A punchy one-line editorial headline (not just the name)"
 founded: YYYY
-died: YYYY or "ongoing"
-status: "dead" | "declining" | "pivoted" | "acqui-hired"
+died: YYYY
+status: "dead"
 location: "City, State/Country"
 totalFunding: "$XXM"
 peakValuation: "$XXB"
 peakEmployees: NNN
-causeOfDeath: "no-pmf" | "burned-cash" | "commoditized-by-platform" | "competition" | "acqui-hired" | "regulation" | "ethics-scandal" | "founder-issues"
-aiSubcategory: "content-generation" | "image-generation" | "coding-tools" | "ai-agents" | "ai-companions" | "healthcare-ai" | "autonomous-vehicles" | "enterprise-ai" | "search"
+causeOfDeath: "no-pmf" | "burned-cash" | "commoditized" | "founder-issues" | "platform-risk"
+aiSubcategory: "ai-wrappers" | "dev-tools" | "enterprise-ai" | "content-generation" | "ai-companions" | "ai-agents"
 keyMilestones:
   - "Milestone 1"
   - "Milestone 2"
@@ -86,11 +88,13 @@ async function main() {
   const mdxMatch = content.match(/```mdx\n([\s\S]*?)```/);
   const mdxContent = mdxMatch ? mdxMatch[1].trim() : content.trim();
 
+  // Validate frontmatter before writing
+  const { data } = matter(mdxContent);
+  validateFrontmatter(data, `${startupName} (generated)`);
+
   // Extract slug from frontmatter and sanitize to prevent path traversal
-  const slugMatch = mdxContent.match(/slug:\s*"([^"]+)"/);
-  const rawSlug = slugMatch
-    ? slugMatch[1]
-    : startupName.toLowerCase().replace(/\s+/g, "-");
+  const rawSlug =
+    (data.slug as string) || startupName.toLowerCase().replace(/\s+/g, "-");
   const slug = rawSlug.replace(/[^a-z0-9-]/g, "");
 
   const outputPath = path.join(

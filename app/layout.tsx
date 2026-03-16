@@ -4,7 +4,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "The Startup Obituary — AI Era Edition",
   description:
-    "A curated graveyard of AI-era startup failures. Novelistic narratives of the rise and fall of companies that bet big on artificial intelligence.",
+    "Obituaries for obscure post-ChatGPT AI startups that shut down. Lessons from the companies most founders never heard of.",
 };
 
 export default function RootLayout({
