@@ -43,8 +43,8 @@ export function VitalStats({ startup }: { startup: Startup }) {
           Key Milestones
         </div>
         <ul className="text-sm leading-relaxed flex flex-wrap gap-x-6 gap-y-1">
-          {startup.keyMilestones.map((m, i) => (
-            <li key={i}>• {m}</li>
+          {startup.keyMilestones.map((m) => (
+            <li key={m}>• {m}</li>
           ))}
         </ul>
       </div>
