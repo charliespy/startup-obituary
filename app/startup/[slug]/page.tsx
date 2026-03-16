@@ -19,6 +19,11 @@ export async function generateMetadata({
   return {
     title: `${startup.name} — The Startup Obituary`,
     description: startup.tagline,
+    openGraph: {
+      title: `${startup.name}: ${startup.tagline}`,
+      description: startup.content.split("\n\n")[0],
+      siteName: "The Startup Obituary",
+    },
   };
 }
 

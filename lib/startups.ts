@@ -26,10 +26,16 @@ export function getAllStartups(): Startup[] {
 }
 
 export function getStartupBySlug(slug: string): Startup | undefined {
-  const startups = getAllStartups();
-  return startups.find((s) => s.slug === slug);
+  const filePath = path.join(CONTENT_DIR, `${slug}.mdx`);
+  if (!fs.existsSync(filePath)) return undefined;
+  const raw = fs.readFileSync(filePath, "utf-8");
+  const { data, content } = matter(raw);
+  return { ...(data as StartupFrontmatter), content };
 }
 
 export function getAllSlugs(): string[] {
-  return getAllStartups().map((s) => s.slug);
+  return fs
+    .readdirSync(CONTENT_DIR)
+    .filter((f) => f.endsWith(".mdx"))
+    .map((f) => f.replace(/\.mdx$/, ""));
 }

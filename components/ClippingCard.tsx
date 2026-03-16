@@ -25,7 +25,7 @@ export function ClippingCard({
   return (
     <Link href={`/startup/${startup.slug}`} className="block group">
       <article
-        className={`bg-paper-white p-5 border border-rule shadow-[2px_3px_8px_rgba(0,0,0,0.08)] ${rotation} hover:rotate-0 hover:shadow-[4px_6px_16px_rgba(0,0,0,0.12)] hover:-translate-y-1 transition-all duration-200`}
+        className={`bg-paper-white p-5 border border-rule shadow-[2px_3px_8px_rgba(0,0,0,0.08)] ${rotation} hover:rotate-0 hover:shadow-[4px_6px_16px_rgba(0,0,0,0.12)] hover:-translate-y-1 transition-[transform,box-shadow] duration-200`}
       >
         <h3 className="text-base font-bold leading-snug group-hover:underline decoration-1 underline-offset-2">
           {startup.name}: {startup.tagline}

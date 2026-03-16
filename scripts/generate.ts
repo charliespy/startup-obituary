@@ -73,7 +73,7 @@ async function main() {
       { role: "user", content: USER_PROMPT(startupName) },
     ],
     temperature: 0.7,
-    max_tokens: 4000,
+    max_completion_tokens: 4000,
   });
 
   const content = response.choices[0]?.message?.content;
@@ -86,11 +86,12 @@ async function main() {
   const mdxMatch = content.match(/```mdx\n([\s\S]*?)```/);
   const mdxContent = mdxMatch ? mdxMatch[1].trim() : content.trim();
 
-  // Extract slug from frontmatter
+  // Extract slug from frontmatter and sanitize to prevent path traversal
   const slugMatch = mdxContent.match(/slug:\s*"([^"]+)"/);
-  const slug = slugMatch
+  const rawSlug = slugMatch
     ? slugMatch[1]
     : startupName.toLowerCase().replace(/\s+/g, "-");
+  const slug = rawSlug.replace(/[^a-z0-9-]/g, "");
 
   const outputPath = path.join(
     process.cwd(),
